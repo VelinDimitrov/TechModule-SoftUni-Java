@@ -15,7 +15,11 @@ public class Main {
             if (command.equals("A")) {
                 String name = input.next();
                 String number=input.next();
-                phoneBook.put(name, number);
+                if (!phoneBook.containsKey(name)) {
+                    phoneBook.put(name, number);
+                } else {
+                    phoneBook.replace(name, number);
+                }
             } else if (command.equals("S")) {
                 String name=input.next();
                 if (phoneBook.containsKey(name)) {
