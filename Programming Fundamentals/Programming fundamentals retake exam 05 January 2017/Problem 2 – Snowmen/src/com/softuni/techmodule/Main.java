@@ -14,36 +14,37 @@ public class Main {
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
 
-        while (true) {
-            List<Boolean> canAtack=new ArrayList<>(Arrays.asList(new Boolean[sequence.size()]));
-            Collections.fill(canAtack, Boolean.TRUE);
-            List<Integer> tempSequence=new ArrayList<>();
+        while (sequence.size()>1) {
+            List<Integer> tempSequence=new ArrayList<>(sequence);
+
+
+            List<Integer> lostSnowmen=new ArrayList<>();
             for (int i = 0; i < sequence.size(); i++) {
                 int attackerIndex=i;
                 int targetIndex=sequence.get(i)%sequence.size();
                 int absolueValue= Math.abs(attackerIndex-targetIndex);
-                if (!canAtack.get(attackerIndex)) {
+                if (lostSnowmen.contains(sequence.get(attackerIndex))) {
                     continue;
                 }
-
                 if (absolueValue == 0) {
                     System.out.printf("%d performed harakiri%n",attackerIndex);
-                    canAtack.set(attackerIndex, false);
+                    lostSnowmen.add(sequence.get(attackerIndex));
+                    tempSequence.remove(sequence.get(attackerIndex));
                 } else if (absolueValue % 2 == 0) {
                     System.out.printf("%d x %d -> %d wins%n",attackerIndex,targetIndex,attackerIndex);
-                    canAtack.set(targetIndex, false);
-                    tempSequence.add(attackerIndex);
+                    lostSnowmen.add(sequence.get(targetIndex));
+                    tempSequence.remove(sequence.get(targetIndex));
                 } else if (absolueValue % 2 == 1) {
                     System.out.printf("%d x %d -> %d wins%n",attackerIndex,targetIndex,targetIndex);
-                    canAtack.set(attackerIndex, false);
-                    tempSequence.add(targetIndex);
+                    lostSnowmen.add(sequence.get(attackerIndex));
+                    tempSequence.remove(sequence.get(attackerIndex));
                 }
-                if (canAtack.size() == 2) {
-                    return;
+
+                if (tempSequence.size() ==1) {
+                    break;
                 }
             }
-            sequence=tempSequence;
-
+            sequence.removeAll(lostSnowmen);
         }
     }
 }
