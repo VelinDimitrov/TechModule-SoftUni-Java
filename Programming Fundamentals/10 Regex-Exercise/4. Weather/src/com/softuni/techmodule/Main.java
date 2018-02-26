@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -36,8 +37,16 @@ public class Main {
             }
             textLines = input.readLine();
         }
-            weather.entrySet().stream().sorted(Comparator.comparing(x -> x.getValue().get(1)));
-        System.out.println(weather);
+
+            weather.entrySet().stream().sorted(Comparator.comparingDouble(x->Double.parseDouble(x.getValue().get(0))))
+                    .forEach(x->{
+                        System.out.printf("%s => %.2f => %s%n"
+                                ,x.getKey()
+                                ,Double.parseDouble(x.getValue().get(0))
+                                ,x.getValue().get(1));
+                    });
+
+
 
 
     }
