@@ -3,25 +3,86 @@ package com.softuni.techmodule;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        double moneyAmount=Double.parseDouble(input.readLine());
-        int studentsNumber=Integer.parseInt(input.readLine());
-        double singleLightsaber=Double.parseDouble(input.readLine());
-        double singleRobe=Double.parseDouble(input.readLine());
-        double singleBelt=Double.parseDouble(input.readLine());
-        int freeBelts=studentsNumber/6;
-        double lightsabers=singleLightsaber*(studentsNumber+Math.ceil(studentsNumber*0.10) );
-        double robes=studentsNumber*singleRobe;
-        double belts=singleBelt*(studentsNumber-freeBelts);
-        double result=lightsabers+robes+belts;
-        if (result <= moneyAmount) {
-            System.out.printf("The money is enough - it would cost %.2flv.",result);
-        } else {
-            System.out.printf("Ivan Cho will need %.2flv more.",result-moneyAmount);
+        int length=Integer.parseInt(input.readLine());
+        String DNA=input.readLine();
+        int bestSum=0;
+        int bestLeftmostIndex=0;
+        int bestSubsequenceOfOnesOnbestSequence=0;
+        int[] bestSequence=new int[length];
+        int samples=0;
+        int bestSample=0;
+
+
+        while (!(DNA.equals("Clone them!"))) {
+            int[] sequence= Arrays.stream(DNA.split("[!]+")).mapToInt(x->Integer.parseInt(x)).toArray();
+
+            samples++;
+            int sum=0;
+            int leftmostIndex=0;
+            int subsequenceOfOnes=1;
+            int bestSubsequenceOfOnes=1;
+
+
+            for (int i = 0; i < sequence.length - 1; i++) {
+
+                if (sequence[i] + sequence[i + 1] == 2) {
+                    subsequenceOfOnes++;
+                    if (bestSubsequenceOfOnes < subsequenceOfOnes) {
+                        bestSubsequenceOfOnes=subsequenceOfOnes;
+                        leftmostIndex=(i-subsequenceOfOnes)+2;
+                    }
+
+
+                }else{
+                    subsequenceOfOnes=1;
+
+                }
+
+
+
+                if (sequence[i] == 1) {
+                    sum++;
+                }
+            }
+
+            if (sequence[length-1] == 1) {
+                sum++;
+            }
+
+            if (leftmostIndex < bestLeftmostIndex || bestSubsequenceOfOnesOnbestSequence < bestSubsequenceOfOnes) {
+                bestLeftmostIndex=leftmostIndex;
+                bestSubsequenceOfOnesOnbestSequence=bestSubsequenceOfOnes;
+                bestSequence=sequence;
+                bestSum=sum;
+                bestSample=samples;
+            }
+            if (leftmostIndex == bestLeftmostIndex && bestSubsequenceOfOnesOnbestSequence == bestSubsequenceOfOnes) {
+                if (bestSum < sum) {
+                    bestLeftmostIndex=leftmostIndex;
+                    bestSubsequenceOfOnesOnbestSequence=bestSubsequenceOfOnes;
+                    bestSequence=sequence;
+                    bestSum=sum;
+                    bestSample=samples;
+                }
+            }
+
+
+            DNA=input.readLine();
         }
+
+        System.out.printf("Best DNA sample %d with sum: %d.%n",bestSample,bestSum);
+        for (int num :
+                bestSequence) {
+            System.out.print(num+" ");
+
+        }
+
+
     }
 }
