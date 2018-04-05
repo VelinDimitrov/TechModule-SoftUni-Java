@@ -14,8 +14,16 @@ public class Main {
         if (URL.contains("://")) {
             int index=URL.indexOf("://");
             protocol=URL.substring(0,index);
+            URL=URL.split("://")[1];
         }
 
-        if (URL)
+        if (URL.contains("/")) {
+            int index = URL.indexOf('/');
+            server = URL.substring(0, index);
+            resource = URL.substring(index + 1);
+        } else {
+            server=URL;
+        }
+        System.out.printf("[protocol] = \"%s\"\n[server] = \"%s\"\n[resource] = \"%s\"",protocol,server,resource);
     }
 }
